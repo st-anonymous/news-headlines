@@ -25,7 +25,7 @@ const GetRenderingItems = (
     // It would produce the Array for newly rendered items on each iteration...
     let newlyRenderedItems: Array<HeadlinesType> = [];
 
-    headlines.forEach(headline => {
+    headlines.map(headline => {
       if (
         !headline.isPinned &&
         !headline.isRendered &&
@@ -36,12 +36,17 @@ const GetRenderingItems = (
           {...headline, isRendered: true},
         ];
         newItemsToBeAddedCount--;
+        return {...headline, isRendered: true};
+      } else {
+        return headline;
       }
     });
 
+    const newlyRenderedItemsKeys = newlyRenderedItems.map(item => item.key);
+
     // rest of the array to be added to the last to show newly added items first...
     const restOfHeadlines = headlines.filter(
-      headline => !newlyRenderedItems.includes(headline),
+      headline => !newlyRenderedItemsKeys.includes(headline.key),
     );
 
     const newHeadlines = [...newlyRenderedItems, ...restOfHeadlines];
