@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
   ListRenderItemInfo,
   StyleSheet,
@@ -7,60 +7,13 @@ import {
   View,
 } from 'react-native';
 import {RowMap, SwipeListView} from 'react-native-swipe-list-view';
-
-export type ItemType = {key: number; title: string; isPinned: boolean};
+import {HeadlinesType} from '../types/Headlines';
+import useHeadlines from '../hooks/useHeadlines';
 
 const HeadlineCardsContainer = () => {
-  const [items, setItems] = useState<Array<ItemType>>([
-    {key: 1, title: 'tony1', isPinned: false},
-    {key: 2, title: 'siri2', isPinned: false},
-    {key: 3, title: 'tony3', isPinned: false},
-    {key: 4, title: 'siri4', isPinned: false},
-    {key: 5, title: 'tony5', isPinned: false},
-    {key: 6, title: 'siri6', isPinned: false},
-  ]);
-  const [pinnedItems, setPinnedItems] = useState<Array<ItemType>>([]);
-  const [renderingItems, setRenderingItems] = useState<Array<ItemType>>(items);
+  const {renderingItems, onTogglePinRow, onDeleteRow} = useHeadlines();
 
-  useEffect(() => {
-    const newRenderingItems = [
-      ...pinnedItems,
-      ...items.filter(item => !item.isPinned),
-    ];
-    setRenderingItems(newRenderingItems);
-  }, [items, pinnedItems]);
-
-  const onTogglePinRow = (rowMap: RowMap<ItemType>, rowItem: ItemType) => {
-    // console.log(rowItem, 'pinning 📌');
-    rowMap[rowItem.key].closeRow();
-    setItems(
-      items.map(item => {
-        if (item.key === rowItem.key) {
-          return {...rowItem, isPinned: !rowItem.isPinned};
-        } else {
-          return item;
-        }
-      }),
-    );
-    if (rowItem.isPinned) {
-      setPinnedItems(
-        pinnedItems.filter(pinnedItem => pinnedItem.key !== rowItem.key),
-      );
-    } else {
-      pinnedItems.unshift({...rowItem, isPinned: true});
-    }
-  };
-
-  const onDeleteRow = (rowMap: RowMap<ItemType>, rowItem: ItemType) => {
-    // console.log(rowItem, 'deleting ❌');
-    rowMap[rowItem.key].closeRow();
-    setPinnedItems(
-      pinnedItems.filter(pinnedItem => pinnedItem.key !== rowItem.key),
-    );
-    setItems(items.filter(item => item.key !== rowItem.key));
-  };
-
-  const renderItem = (data: ListRenderItemInfo<ItemType>) => {
+  const renderItem = (data: ListRenderItemInfo<HeadlinesType>) => {
     return (
       <View style={styles.visibleRow}>
         <Text>{data.item.title}</Text>
@@ -70,8 +23,8 @@ const HeadlineCardsContainer = () => {
   };
 
   const renderHiddenItem = (
-    data: ListRenderItemInfo<ItemType>,
-    rowMap: RowMap<ItemType>,
+    data: ListRenderItemInfo<HeadlinesType>,
+    rowMap: RowMap<HeadlinesType>,
   ) => {
     return (
       <View style={styles.invisibleRow}>

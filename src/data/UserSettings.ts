@@ -3,7 +3,7 @@ import {UserSettingsType} from '../types/UserSettings';
 
 const UserSettingsAtom = atom<UserSettingsType>({
   key: 'UserSettingsAtom',
-  default: {delay: 10000},
+  default: {delay: 10},
 });
 
 export default UserSettingsAtom;
