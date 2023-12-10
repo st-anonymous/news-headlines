@@ -13,16 +13,19 @@ const GetRenderingItems = (
   if (size <= pinnedHeadlines.length) {
     newRenderingItems = pinnedHeadlines.slice(0, size);
   } else {
+    // it would create an array of items that are rendered but not pinned...
     const alreadyRenderedUnpinnedItems = headlines.filter(
       headline => !headline.isPinned && headline.isRendered,
     );
 
-    let newlyRenderedItems: Array<HeadlinesType> = [];
-
+    // total new items to be added would be size - total present items (i.e. pinned + unpinned)
     let newItemsToBeAddedCount =
       size - pinnedHeadlines.length - alreadyRenderedUnpinnedItems.length;
 
-    const newHeadlines = headlines.map(headline => {
+    // It would produce the Array for newly rendered items on each iteration...
+    let newlyRenderedItems: Array<HeadlinesType> = [];
+
+    headlines.forEach(headline => {
       if (
         !headline.isPinned &&
         !headline.isRendered &&
@@ -33,22 +36,28 @@ const GetRenderingItems = (
           {...headline, isRendered: true},
         ];
         newItemsToBeAddedCount--;
-        return {...headline, isRendered: true};
-      } else {
-        return headline;
       }
     });
 
+    // rest of the array to be added to the last to show newly added items first...
+    const restOfHeadlines = headlines.filter(
+      headline => !newlyRenderedItems.includes(headline),
+    );
+
+    const newHeadlines = [...newlyRenderedItems, ...restOfHeadlines];
+
+    // set headlines and store in async storage...
     setHeadlinesAtom(newHeadlines);
     SetAsyncStorage('headlines', newHeadlines);
 
+    // first to show pinned items, then new items and lastly other rendered items...
     newRenderingItems = [
       ...pinnedHeadlines,
       ...newlyRenderedItems,
       ...alreadyRenderedUnpinnedItems,
     ];
-    console.log(newRenderingItems, 'finalNewRenderingItems');
   }
+
   return newRenderingItems;
 };
 

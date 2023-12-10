@@ -18,12 +18,10 @@ const useInit = () => {
       let headlines = await GetAsyncStorage('headlines');
       let pinnedHeadlines = await GetAsyncStorage('pinnedHeadlines');
       if (!headlines) {
-        console.log('aarha yaha');
         try {
           const news = await axios.get(
             'https://newsapi.org/v2/everything?apiKey=b6684226df7948ddb6df5ad210a9c9dd&q=india',
           );
-          console.log(news);
           const articles = news.data.articles;
           headlines = articles.map((article: any) => {
             return {
