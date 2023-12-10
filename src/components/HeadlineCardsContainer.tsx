@@ -16,7 +16,7 @@ const HeadlineCardsContainer = () => {
   const renderItem = (data: ListRenderItemInfo<HeadlinesType>) => {
     return (
       <View style={styles.visibleRow}>
-        <Text>{data.item.title}</Text>
+        <Text style={styles.visibleRowText}>{data.item.title}</Text>
         {data.item.isPinned && <Text style={styles.pinnedSymbol}>⭐</Text>}
       </View>
     );
@@ -67,9 +67,15 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: 'black',
-    alignItems: 'center',
     justifyContent: 'center',
     height: 80,
+  },
+  visibleRowText: {
+    fontSize: 18,
+    fontWeight: 'normal',
+    color: 'black',
+    paddingHorizontal: 15,
+    textAlign: 'left',
   },
   pinnedSymbol: {
     position: 'absolute',

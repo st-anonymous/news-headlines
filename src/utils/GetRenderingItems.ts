@@ -1,5 +1,6 @@
 import {SetterOrUpdater} from 'recoil';
 import {HeadlinesType} from '../types/Headlines';
+import {SetAsyncStorage} from './AsyncStorage';
 
 const GetRenderingItems = (
   headlines: Array<HeadlinesType>,
@@ -39,6 +40,7 @@ const GetRenderingItems = (
     });
 
     setHeadlinesAtom(newHeadlines);
+    SetAsyncStorage('headlines', newHeadlines);
 
     newRenderingItems = [
       ...pinnedHeadlines,
