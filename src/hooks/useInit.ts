@@ -5,7 +5,7 @@ import Home from '../screens/Home';
 import {GetAsyncStorage, SetAsyncStorage} from '../utils/AsyncStorage';
 import {useSetRecoilState} from 'recoil';
 import {HeadlinesAtom, PinnedHeadlinesAtom} from '../data/Headlines';
-import axios from 'axios';
+import FetchHeadlinesFromAPI from '../utils/FetchHeadlines';
 
 export type ScreenType = React.JSX.Element;
 
@@ -18,21 +18,7 @@ const useInit = () => {
       let headlines = await GetAsyncStorage('headlines');
       let pinnedHeadlines = await GetAsyncStorage('pinnedHeadlines');
       if (!headlines) {
-        try {
-          const news = await axios.get(
-            'https://newsapi.org/v2/everything?apiKey=b6684226df7948ddb6df5ad210a9c9dd&q=india',
-          );
-          const articles = news.data.articles;
-          headlines = articles.map((article: any) => {
-            return {
-              title: article.title,
-              key: article.publishedAt.toString(),
-              isPinned: false,
-            };
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        headlines = await FetchHeadlinesFromAPI();
         SetAsyncStorage('headlines', headlines);
       }
       setHeadlinesAtom(headlines);
