@@ -17,7 +17,7 @@ const Header = () => {
 
 export default Header;
 
-export const styles = StyleSheet.create({
+const styles = StyleSheet.create({
   headerContainer: {
     height: '10%',
     backgroundColor: 'skyblue',

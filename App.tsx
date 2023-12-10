@@ -1,19 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {SafeAreaView, StatusBar, View} from 'react-native';
-import Header from './src/components/Header';
-import HeadlineCardsContainer from './src/components/HeadlineCardsContainer';
+import useInit from './src/hooks/useInit';
 
-function App(): React.JSX.Element {
+const App = (): React.JSX.Element => {
+  const {Screen} = useInit();
   return (
     <SafeAreaView>
       <StatusBar hidden={true} />
-      <View style={{height: '100%'}}>
-        <Header />
-        <HeadlineCardsContainer />
-      </View>
+      <View style={{height: '100%'}}>{Screen}</View>
     </SafeAreaView>
   );
-}
+};
 
 export default App;
