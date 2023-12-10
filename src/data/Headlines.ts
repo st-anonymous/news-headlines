@@ -6,9 +6,9 @@ const HeadlinesAtom = atom<Array<HeadlinesType>>({
   default: [],
 });
 
-const PinnedHeadlinedsAtom = atom<Array<HeadlinesType>>({
-  key: 'PinnedHeadlinedsAtom',
+const PinnedHeadlinesAtom = atom<Array<HeadlinesType>>({
+  key: 'PinnedHeadlinesAtom',
   default: [],
 });
 
-export {HeadlinesAtom, PinnedHeadlinedsAtom};
+export {HeadlinesAtom, PinnedHeadlinesAtom};

@@ -4,7 +4,7 @@ import Splash from '../screens/Splash';
 import Home from '../screens/Home';
 import {GetAsyncStorage, SetAsyncStorage} from '../utils/AsyncStorage';
 import {useSetRecoilState} from 'recoil';
-import {HeadlinesAtom, PinnedHeadlinedsAtom} from '../data/Headlines';
+import {HeadlinesAtom, PinnedHeadlinesAtom} from '../data/Headlines';
 import axios from 'axios';
 
 export type ScreenType = React.JSX.Element;
@@ -12,30 +12,34 @@ export type ScreenType = React.JSX.Element;
 const useInit = () => {
   const [Screen, setScreen] = useState<ScreenType>(Splash);
   const setHeadlinesAtom = useSetRecoilState(HeadlinesAtom);
-  const setPinnedHeadlinedsAtom = useSetRecoilState(PinnedHeadlinedsAtom);
+  const setPinnedHeadlinesAtom = useSetRecoilState(PinnedHeadlinesAtom);
   useEffect(() => {
     (async () => {
       let headlines = await GetAsyncStorage('headlines');
       let pinnedHeadlines = await GetAsyncStorage('pinnedHeadlines');
-      console.log(headlines, 'headlines');
-      console.log(pinnedHeadlines, 'pinnedHeadlines');
       if (!headlines) {
-        const news = await axios.get(
-          'https://newsapi.org/v2/top-headlines?country=in&apiKey=b6684226df7948ddb6df5ad210a9c9dd',
-        );
-        const articles = news.data.articles;
-        headlines = articles.map((article: any) => {
-          return {
-            title: article.title,
-            key: article.publishedAt.toString(),
-            isPinned: false,
-          };
-        });
+        console.log('aarha yaha');
+        try {
+          const news = await axios.get(
+            'https://newsapi.org/v2/everything?apiKey=b6684226df7948ddb6df5ad210a9c9dd&q=india',
+          );
+          console.log(news);
+          const articles = news.data.articles;
+          headlines = articles.map((article: any) => {
+            return {
+              title: article.title,
+              key: article.publishedAt.toString(),
+              isPinned: false,
+            };
+          });
+        } catch (error) {
+          console.log(error);
+        }
         SetAsyncStorage('headlines', headlines);
       }
       setHeadlinesAtom(headlines);
       if (pinnedHeadlines) {
-        setPinnedHeadlinedsAtom(pinnedHeadlines);
+        setPinnedHeadlinesAtom(pinnedHeadlines);
       }
       setTimeout(() => {
         setScreen(Home);

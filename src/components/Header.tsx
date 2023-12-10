@@ -16,6 +16,15 @@ const Header = () => {
     useRecoilState(UserSettingsAtom);
   const [delay, setDelay] = useState(userSettingsAtom.delay.toString());
 
+  const OnRefresh = () => {
+    setUserSettingsAtom(prev => {
+      return {
+        ...prev,
+        manualRefresh: true,
+      };
+    });
+  };
+
   const OnSetDelay = () => {
     setIsSettingDelay(false);
     setUserSettingsAtom(prev => {
@@ -39,7 +48,7 @@ const Header = () => {
         <Text style={styles.symbolText}>⏲</Text>
       </TouchableOpacity>
       <Text style={styles.headerText}>News</Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={OnRefresh}>
         <Text style={styles.symbolText}>↻</Text>
       </TouchableOpacity>
       {isSettingDelay && (
@@ -112,7 +121,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     width: '40%',
-    paddingHorizontal: 6,
+    paddingHorizontal: 10,
   },
   settingDelayButton: {
     justifyContent: 'center',
